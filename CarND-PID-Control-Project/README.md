@@ -22,49 +22,64 @@ Self-Driving Car Engineer Nanodegree Program
 3. Compile: `cmake .. && make`
 4. Run it: `./pid`
 
-## Results
-
-##Effect each of the P, I, D components
+## Effect each of the P, I, D components
 
 * Kp scales the direct reaction on the tracking error. The larger it is, the faster a tracking error is reduced.
-A large Kp results in over shooting. The  car oscillates around the optimal path. The video shows a large Kp.
+A large Kp results in over-shooting. The car oscillates around the optimal path. The video shows a large Kp.
 
-![alt text][video2]
+![large Kp value][video2]
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=OPx6l4ZHsf4
+" target="_blank"><img src="http://img.youtube.com/vi/OPx6l4ZHsf4/0.jpg" 
+alt="here at youtube" width="480" height="270" border="10" /></a>
+
 
 * Ki scales the integrated tracking error. The integration gives the accumulated offset that should have been corrected previously.
 Ki scales therefore the bias compensation. The video shows a large Ki.
 
-![alt text][video3]
+![large Ki value][video3]
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=4IPbuwjEkWY
+" target="_blank"><img src="http://img.youtube.com/vi/4IPbuwjEkWY/0.jpg" 
+alt="here at youtube" width="480" height="270" border="10" /></a>
 
 *Kd scales the derivative of the tracking error. The derivate of the tracking error is the rate of change and describes the dynamic behind the tracking error. The Kd parameter allows to damp oscilations of the car. A larger value reduces oscillation and inreases the time needed to compensate the tracking error. The video shows a large Kd.
 
-![alt text][video4]
+![large Kd value][video4]
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=ZdmMWmH42Oo
+" target="_blank"><img src="http://img.youtube.com/vi/ZdmMWmH42Oo/0.jpg" 
+alt="here at youtube" width="480" height="270" border="10" /></a>
+
 
 ## How the final hyperparameters were chosen
 
 I started first with a manual adjustment to enable the PID controller to keep the car on the lane.
-Using this parameters the simulator was able to drive the car around the course with the highest speed.
+Using this parameters, the simulator was able to drive the car around the course with the highest speed.
 
-The result has been these parameters
+The result has been these parameters:
 
 | Kp      | Ki       | Kd       |
 |:-------:|:--------:|:--------:|
 | 0.08    | 0.00018  | 0.777    |
 
-In a second step I used the twiggle parameter optimzation algorithm to improve the parameters.
+In a second step, I used the twiggle parameter optimzation algorithm to improve the parameters.
 It started with an error of 0.842142.
 All 900 update requests the PID controller calls the twiggle optimizer to change the value of one parameter. 
 This covers about round of the parcour and ensures that the summarized tracking error is comparable in each optimization step.
 All 4500 update requests the optimization switches to the next parameter. the best error I gained is 0.235613.
 
-The optized parameters are:
+The optimized parameters are:
 
 | Kp        | Ki         | Kd       |
 |:---------:|:----------:|:--------:|
 | 0.0724342 | 0.00006939 | 0.74038  |
 
-![alt text][video1]
+![best solution][video1]
 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=NW2TqJ_NRkQ
+" target="_blank"><img src="http://img.youtube.com/vi/NW2TqJ_NRkQ/0.jpg" 
+alt="here at youtube" width="480" height="270" border="10" /></a>
 
 
 
