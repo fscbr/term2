@@ -63,11 +63,11 @@ The result has been these parameters:
 |:-------:|:--------:|:--------:|
 | 0.08    | 0.00018  | 0.777    |
 
-In a second step, I used the twiggle parameter optimzation algorithm to improve the parameters.
+In a second step, I used the twiggle parameter optimization algorithm to improve the parameters.
 It started with an error of 0.842142.
 All 900 update requests the PID controller calls the twiggle optimizer to change the value of one parameter. 
 This covers about round of the parcour and ensures that the summarized tracking error is comparable in each optimization step.
-All 4500 update requests the optimization switches to the next parameter. the best error I gained is 0.235613.
+All 4500 update requests the optimization switches to the next parameter. The best error I gained is 0.235613.
 
 The optimized parameters are:
 
