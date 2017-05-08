@@ -21,6 +21,7 @@ Self-Driving Car Engineer Nanodegree Program
 2. Make a build directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./pid`
+5. Choose Fastest to Simple Graphics quality for the simulator configuration 
 
 ## Effect each of the P, I, D components
 
@@ -50,6 +51,9 @@ alt="here at youtube" width="480" height="270" border="10" /></a>
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=ZdmMWmH42Oo
 " target="_blank"><img src="http://img.youtube.com/vi/ZdmMWmH42Oo/0.jpg" 
 alt="here at youtube" width="480" height="270" border="10" /></a>
+
+
+* update rate of the simulator. My PID controller is optimized for the fastest upto simple graphics quality. Higher graphics modi result because of a slow frame rate in a lagged communication with the PID control. This leads to oscillation and might cause the car to get off the track.
 
 
 ## How the final hyperparameters were chosen
