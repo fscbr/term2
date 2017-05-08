@@ -44,7 +44,7 @@ Ki scales therefore the bias compensation. The video shows a large Ki.
 " target="_blank"><img src="http://img.youtube.com/vi/4IPbuwjEkWY/0.jpg" 
 alt="here at youtube" width="480" height="270" border="10" /></a>
 
-*Kd scales the derivative of the tracking error. The derivate of the tracking error is the rate of change and describes the dynamic behind the tracking error. The Kd parameter allows to damp oscilations of the car. A larger value reduces oscillation and inreases the time needed to compensate the tracking error. The video shows a large Kd.
+* Kd scales the derivative of the tracking error. The derivate of the tracking error is the rate of change and describes the dynamic behind the tracking error. The Kd parameter allows to damp oscilations of the car. A larger value reduces oscillation and inreases the time needed to compensate the tracking error. The video shows a large Kd.
 
 ![large Kd value][video4]
 
