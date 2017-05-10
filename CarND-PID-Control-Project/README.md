@@ -53,7 +53,7 @@ alt="here at youtube" width="480" height="270" border="10" /></a>
 alt="here at youtube" width="480" height="270" border="10" /></a>
 
 
-* update rate of the simulator. My PID controller is optimized for the fastest upto simple graphics quality. Higher graphics modi result because of a slow frame rate in a lagged communication with the PID control. This leads to oscillation and might cause the car to get off the track.
+* Update rate of the simulator. My PID controller is optimized for the fastest upto simple graphics quality. Higher graphics modi result because of a slow frame rate in a lagged communication with the PID control. This leads to oscillation and might cause the car to get off the track.
 
 
 ## How the final hyperparameters were chosen
@@ -84,6 +84,26 @@ The optimized parameters are:
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=NW2TqJ_NRkQ
 " target="_blank"><img src="http://img.youtube.com/vi/NW2TqJ_NRkQ/0.jpg" 
 alt="here at youtube" width="480" height="270" border="10" /></a>
+
+## Introducing a second PID for the speed
+
+After receiving a review where the car was not able to stay on the track, I decided to introduce a second PID for the throttle.
+Doing this, I hope to reduce the effect of slower computers that have a low update rate even in fast graphics mode.
+The PID out put is [-1,1]. The throttle value is then:  throttle_value = pid*0.4+0.6. 
+
+This PID receives the absolute value of the tracking error to get reduce the throttle, when the tracking error is high and to accelerate, when the tracking error is low. The twiggle optimization for steering resulted in:
+
+| Kp        | Ki         | Kd       |
+|:---------:|:----------:|:--------:|
+| 0.0711094 | 0.000064576 | 0.696917  |
+
+for the throttle:
+
+| Kp        | Ki         | Kd       |
+|:---------:|:----------:|:--------:|
+| 0.50415   | 0.00001    | 0.01     |
+
+ I tested it for graphics mode from "Fast" to "Beautiful" and the car stayed on the lane.
 
 
 

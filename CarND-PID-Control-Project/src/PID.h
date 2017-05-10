@@ -11,11 +11,18 @@ public:
   double d_error;
 
   /*
-  * Coefficients
+  * Coefficients Speed
   */ 
   double Kp;
   double Ki;
   double Kd;
+  /*
+  * Coefficients throttle
+  */
+  double Kp_t;
+  double Ki_t;
+  double Kd_t;
+
 
   //previous cte
   double prev_cte;
@@ -23,6 +30,8 @@ public:
   double int_cte;
   //steering
   double steering;
+  //throttle
+  double throttle;
   //flag for initialization of int_cte and prev_cte
   bool isFirst;
   //total error
@@ -37,11 +46,11 @@ public:
   //best gained error
   double best_err = 9999999.0;
   //parameter to optimize
-  double p[3] = {0.08,0.0002,0.8};
+  double p[6] = {0.0,0.0,0.0,0.0,0.0,0.0};
   //best parameter optimized
-  double best_p[3] = {0.08,0.0002,0.8};
+  double best_p[6] = {0.0,0.0,0.0,0.0,0.0,0.0};
   //delta parameter
-  double dp[3] = {0.002, 0.00002, 0.02};
+  double dp[6] = {0.002, 0.00002, 0.02, 0.05, 0.00005, 0.005};
   //current parameterto be optimised
   int parameterIndex = 0;
   //direction for parameter adaptation
@@ -59,7 +68,7 @@ public:
   /*
   * Initialize PID.
   */
-  void Init(double Kp, double Ki, double Kd, bool twiggle);
+  void Init(double aKp, double aKi, double aKd, double aKp_t, double aKi_t, double aKd_t, bool doTwiggle);
 
   /*
   * Update the PID error variables given cross track error and calculate the steering.
@@ -75,6 +84,11 @@ public:
   * Answer the steering
   */
   double GetSteering();
+
+  /*
+  * Answer the steering
+  */
+  double GetThrottle();
 
   /** tune parameter recursive */
   void TwiggleParameter(double error, int paramIndex);
