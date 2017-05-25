@@ -1,0 +1,100 @@
+# CarND-Controls-MPC
+Self-Driving Car Engineer Nanodegree Program
+
+---
+
+## Dependencies
+
+* cmake >= 3.5
+ * All OSes: [click here for installation instructions](https://cmake.org/install/)
+* make >= 4.1
+  * Linux: make is installed by default on most Linux distros
+  * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
+  * Windows: [Click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
+* gcc/g++ >= 5.4
+  * Linux: gcc / g++ is installed by default on most Linux distros
+  * Mac: same deal as make - [install Xcode command line tools]((https://developer.apple.com/xcode/features/)
+  * Windows: recommend using [MinGW](http://www.mingw.org/)
+* [uWebSockets](https://github.com/uWebSockets/uWebSockets) == 0.14, but the master branch will probably work just fine
+  * Follow the instructions in the [uWebSockets README](https://github.com/uWebSockets/uWebSockets/blob/master/README.md) to get setup for your platform. You can download the zip of the appropriate version from the [releases page](https://github.com/uWebSockets/uWebSockets/releases). Here's a link to the [v0.14 zip](https://github.com/uWebSockets/uWebSockets/archive/v0.14.0.zip).
+  * If you have MacOS and have [Homebrew](https://brew.sh/) installed you can just run the ./install-mac.sh script to install this.
+* [Ipopt](https://projects.coin-or.org/Ipopt)
+  * Mac: `brew install ipopt --with-openblas`
+  * Linux
+    * You will need a version of Ipopt 3.12.1 or higher. The version available through `apt-get` is 3.11.x. If you can get that version to work great but if not there's a script `install_ipopt.sh` that will install Ipopt. You just need to download the source from the Ipopt [releases page](https://www.coin-or.org/download/source/Ipopt/) or the [Github releases](https://github.com/coin-or/Ipopt/releases) page.
+    * Then call `install_ipopt.sh` with the source directory as the first argument, ex: `bash install_ipopt.sh Ipopt-3.12.1`. 
+  * Windows: TODO. If you can use the Linux subsystem and follow the Linux instructions.
+* [CppAD](https://www.coin-or.org/CppAD/)
+  * Mac: `brew install cppad`
+  * Linux `sudo apt-get install cppad` or equivalent.
+  * Windows: TODO. If you can use the Linux subsystem and follow the Linux instructions.
+* [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page). This is already part of the repo so you shouldn't have to worry about it.
+* Simulator. You can download these from the [releases tab](https://github.com/udacity/CarND-MPC-Project/releases).
+
+
+
+## Basic Build Instructions
+
+
+1. Clone this repo.
+2. Make a build directory: `mkdir build && cd build`
+3. Compile: `cmake .. && make`
+4. Run it: `./mpc`.
+
+## The Model
+
+
+I choosed the model like discussed in the class lessons having the states car coordinates x, y, car orientation psi, speed v, position error cte and orientation error epsi. 
+
+Actuators are steering delta[-1,1]   and throttle a[-1,1].
+
+Update formulas are:
+
+x_[t+1] = x[t] + v[t] * cos(psi[t]) * dt
+y_[t+1] = y[t] + v[t] * sin(psi[t]) * dt
+psi_[t+1] = psi[t] + v[t] / Lf * delta[t] * dt
+v_[t+1] = v[t] + a[t] * dt
+cte[t+1] = f(x[t]) - y[t] + v[t] * sin(epsi[t]) * dt
+epsi[t+1] = psi[t] - psides[t] + v[t] * delta[t] / Lf * dt
+
+Referenz speed for the solver is 80, it is reduced in curves to 30 mph.
+
+Further constrains for the solver are: no negative x values, psi values are limited to +- 45 degrees
+
+##Timestep Length and Elapsed Duration (N & dt)
+
+
+After intensive fit tests I choosed a small N of 10 and a dT value 0f 0.1.
+If the car is slow (<10 mph) the size of N is set to 45.
+This small N resulted in stable and accurate performance of the model solver. Larger N caused bad solutions indicated in a solution status of "UNKNOWN" 
+of the Ipopt model solver.
+
+For slow speed a large N is required to get a solution with positive throttle.
+
+##Polynomial Fitting and MPC Preprocessing
+
+
+Regularly I choosed a polynom fit of 5th order to get smooth pathes for the MPC. There are situation on the slope where the polynom fit returns solutions causing a high position error compared to the ground thruth way points. F.Ex. after the left turn behind the bridge. In this case I reduce the order stepvise by one down to order 3.
+
+I corrected the car position by 60 msec * speed in x direction. The value is the average of the wait states I added to get a 100msec latency.
+I corrected the y value of the car by 0.9 m to have the car centered on the waypoint path.
+
+The MPC preproccesing is:
+1. latency correction and correction of the car center position.
+2. conversion of map coordinates to car coordinates.
+3. polynom fit, solution quality check, reduction of order if required
+4. calculate cte and epsi
+
+I average the throttle and speed to be less sensitive to bad MPC solver solutions.
+
+##Model Predictive Control with Latency
+
+
+I measure the computation time between receiving telemetry and sending a message. 
+On my desktop this is about 40 msec.
+
+I add wait states to have an overall latency of 100 msec.
+
+To handle the latency in the model, I added 60msec * speed to the x car position assuming that this is the way the car is driven after the sensors have measured the position.
+
+
