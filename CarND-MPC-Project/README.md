@@ -51,17 +51,22 @@ Actuators are steering delta[-1,1]   and throttle a[-1,1].
 Update formulas are:
 
 x_[t+1] = x[t] + v[t] * cos(psi[t]) * dt
+
 y_[t+1] = y[t] + v[t] * sin(psi[t]) * dt
+
 psi_[t+1] = psi[t] + v[t] / Lf * delta[t] * dt
+
 v_[t+1] = v[t] + a[t] * dt
+
 cte[t+1] = f(x[t]) - y[t] + v[t] * sin(epsi[t]) * dt
+
 epsi[t+1] = psi[t] - psides[t] + v[t] * delta[t] / Lf * dt
 
 Referenz speed for the solver is 80, it is reduced in curves to 30 mph.
 
 Further constrains for the solver are: no negative x values, psi values are limited to +- 45 degrees
 
-##Timestep Length and Elapsed Duration (N & dt)
+## Timestep Length and Elapsed Duration (N & dt)
 
 
 After intensive fit tests I choosed a small N of 10 and a dT value 0f 0.1.
@@ -71,7 +76,7 @@ of the Ipopt model solver.
 
 For slow speed a large N is required to get a solution with positive throttle.
 
-##Polynomial Fitting and MPC Preprocessing
+## Polynomial Fitting and MPC Preprocessing
 
 
 Regularly I choosed a polynom fit of 5th order to get smooth pathes for the MPC. There are situation on the slope where the polynom fit returns solutions causing a high position error compared to the ground thruth way points. F.Ex. after the left turn behind the bridge. In this case I reduce the order stepvise by one down to order 3.
@@ -87,7 +92,7 @@ The MPC preproccesing is:
 
 I average the throttle and speed to be less sensitive to bad MPC solver solutions.
 
-##Model Predictive Control with Latency
+## Model Predictive Control with Latency
 
 
 I measure the computation time between receiving telemetry and sending a message. 
